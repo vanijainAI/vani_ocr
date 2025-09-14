@@ -1,0 +1,7 @@
+Flask
+gunicorn
+pytesseract
+pdf2image
+opencv-python-headless
+numpy
+waitress
