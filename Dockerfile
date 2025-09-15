@@ -22,5 +22,8 @@ COPY requirements.txt .
 # Install any needed packages specified in requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
+# Create a symbolic link for tesseract to ensure it's in the PATH
+RUN ln -s /usr/bin/tesseract /usr/local/bin/tesseract
+
 # Copy the rest of the application code into the container
 COPY . .
