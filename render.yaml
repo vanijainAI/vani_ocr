@@ -5,6 +5,10 @@ services:
   repo: https://github.com/vanijainAI/vani_ocr
   plan: free
   region: oregon
-  startCommand: "gunicorn app:app"
   autoDeployTrigger: commit
-version: "1"
+  startCommand: "gunicorn --bind 0.0.0.0:$PORT --worker-tmp-dir /dev/shm app:app"
+  envVars:
+    - key: PYTHON_VERSION
+      value: 3.11 # Match the version in your Dockerfile
+    - key: WEB_CONCURRENCY # Recommended for Gunicorn
+      value: 4
