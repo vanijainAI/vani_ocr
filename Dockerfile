@@ -16,17 +16,18 @@ RUN apt-get update && apt-get install -y \
     --no-install-recommends && \
     rm -rf /var/lib/apt/lists/*
 
-# Find the tesseract executable path and set it as an environment variable
-# This makes the setup resilient to changes in package installation paths.
-ENV TESSERACT_CMD_PATH=/usr/bin/tesseract
-
 # Copy the requirements file into the container
 COPY requirements.txt .
 
 # Install any needed packages specified in requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
+# Find the tesseract executable path and write it to an environment file.
+# This makes the setup resilient to changes in package installation paths.
+RUN echo "export TESSERACT_CMD=$(which tesseract)" > /app/tesseract_env.sh
+
 # Copy the rest of the application code into the container
 COPY . .
 
-CMD ["gunicorn", "app:app"]
+# The CMD instruction sources the environment file and then starts Gunicorn.
+CMD . /app/tesseract_env.sh && gunicorn --bind 0.0.0.0:$PORT --worker-tmp-dir /dev/shm app:app

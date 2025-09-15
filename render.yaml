@@ -13,5 +13,3 @@ services:
   envVars:
     - key: PYTHON_VERSION
       value: 3.11 # Match the version in your Dockerfile
-    - key: TESSERACT_CMD
-      value: /usr/bin/tesseract
