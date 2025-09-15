@@ -3,9 +3,9 @@
 set -o errexit
 
 # Install system dependencies for Tesseract and Poppler
-apt-get update
-apt-get install -y tesseract-ocr poppler-utils
+sudo apt-get update
+sudo apt-get install -y tesseract-ocr poppler-utils
 
-# Upgrade pip and install Python dependencies into the virtual environment
-./.venv/bin/python -m pip install --upgrade pip
-./.venv/bin/python -m pip install -r requirements.txt
+# Install Python dependencies
+pip install --upgrade pip
+pip install -r requirements.txt

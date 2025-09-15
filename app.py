@@ -10,6 +10,10 @@ import pytesseract
 UPLOAD_FOLDER = 'uploads'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'tiff', 'bmp', 'pdf'}
 
+# --- Path to External Dependencies (for local Windows development) ---
+# This will be None on Render, which is what we want.
+POPPLER_PATH = os.environ.get('POPPLER_PATH', None)
+
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.secret_key = 'supersecretkey' # Needed for flashing messages
@@ -75,14 +79,7 @@ def upload_file():
             extracted_text = ""
             try:
                 if filename.lower().endswith('.pdf'):
-                    # Check if we are running locally on Windows and have poppler_path defined
-                    try:
-                        pages = convert_from_path(filepath, poppler_path=poppler_path)
-                    except NameError: 
-                        # This will run on the Render server, where poppler_path is not defined.
-                        # pdf2image will find poppler-utils from the system PATH.
-                        pages = convert_from_path(filepath)
-
+                    pages = convert_from_path(filepath, poppler_path=POPPLER_PATH)
                     for i, page_image in enumerate(pages):
                         page_cv_image = cv2.cvtColor(np.array(page_image), cv2.COLOR_RGB2BGR)
                         extracted_text += f"--- Page {i+1} ---\n"
@@ -100,14 +97,15 @@ def upload_file():
 if __name__ == '__main__':
     # --- Local Windows Development Setup ---
     # Define paths for local external dependencies
+    # On Windows, you might need to set the POPPLER_PATH environment variable
+    # or define it here if the getenv call doesn't work for your setup.
+    # Example: POPPLER_PATH = r'C:\poppler\poppler-25.07.0\bin'
     pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
-    poppler_path = r'C:\poppler\poppler-25.07.0\bin'
 
     # Ensure the upload folder exists when running locally
-    if not os.path.exists(UPLOAD_FOLDER):
-        os.makedirs(UPLOAD_FOLDER)
+    os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
     # Use Waitress for local production-like testing
     from waitress import serve
-    print("Starting production server on http://0.0.0.0:5000")
-    serve(app, host="0.0.0.0", port=5000)
+    print("Starting development server on http://127.0.0.1:5000")
+    serve(app, host="127.0.0.1", port=5000)
