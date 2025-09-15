@@ -1,10 +1,18 @@
+print("Starting application: Stage 1 - Initializing...")
 import os
+print("Starting application: Stage 2 - Imported os")
 from flask import Flask, request, render_template, redirect, url_for, flash
+print("Starting application: Stage 3 - Imported Flask")
 from werkzeug.utils import secure_filename
+print("Starting application: Stage 4 - Imported Werkzeug")
 from pdf2image import convert_from_path
+print("Starting application: Stage 5 - Imported pdf2image")
 import cv2
+print("Starting application: Stage 6 - Imported cv2")
 import numpy as np
+print("Starting application: Stage 7 - Imported numpy")
 import pytesseract
+print("Starting application: Stage 8 - Imported pytesseract. All imports successful.")
 
 # --- Configuration ---
 UPLOAD_FOLDER = 'uploads'
@@ -14,12 +22,16 @@ ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'tiff', 'bmp', 'pdf'}
 # This will be None on Render, which is what we want.
 POPPLER_PATH = os.environ.get('POPPLER_PATH', None)
 
+print("Starting application: Stage 9 - Creating Flask app object...")
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.secret_key = 'supersecretkey' # Needed for flashing messages
+print("Starting application: Stage 10 - Flask app configured.")
 
 # Ensure the upload folder exists when the app starts
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+print("Starting application: Stage 11 - Uploads directory checked/created.")
+print("--- Application Initialization Complete ---")
 
 def allowed_file(filename):
     return '.' in filename and \
