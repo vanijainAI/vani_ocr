@@ -7,3 +7,4 @@ services:
   region: oregon
   startCommand: "gunicorn app:app"
   autoDeployTrigger: commit
+version: "1"
