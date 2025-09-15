@@ -18,6 +18,9 @@ app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.secret_key = 'supersecretkey' # Needed for flashing messages
 
+# Ensure the upload folder exists when the app starts
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -101,9 +104,6 @@ if __name__ == '__main__':
     # or define it here if the getenv call doesn't work for your setup.
     # Example: POPPLER_PATH = r'C:\poppler\poppler-25.07.0\bin'
     pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
-
-    # Ensure the upload folder exists when running locally
-    os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
     # Use Waitress for local production-like testing
     from waitress import serve
