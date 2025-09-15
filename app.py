@@ -21,9 +21,6 @@ app.secret_key = 'supersecretkey' # Needed for flashing messages
 # Ensure the upload folder exists when the app starts
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
-# Set the Tesseract command path for the production environment (Linux/Docker)
-pytesseract.pytesseract.tesseract_cmd = '/usr/bin/tesseract'
-
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
