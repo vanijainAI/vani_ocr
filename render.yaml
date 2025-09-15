@@ -1,11 +1,9 @@
 services:
 - type: web
   name: vani_ocr
-  runtime: python
+  runtime: docker
   repo: https://github.com/vanijainAI/vani_ocr
   plan: free
   region: oregon
-  buildCommand: bash build.sh
-  startCommand: python -m gunicorn app:app
+  startCommand: "gunicorn app:app"
   autoDeployTrigger: commit
-version: "1"
