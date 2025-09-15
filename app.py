@@ -21,9 +21,8 @@ app.secret_key = 'supersecretkey' # Needed for flashing messages
 # Ensure the upload folder exists when the app starts
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
-# Set the Tesseract command path for the production environment (Render)
-if os.environ.get('RENDER'):
-    pytesseract.pytesseract.tesseract_cmd = '/usr/bin/tesseract'
+# Set the Tesseract command path for the production environment (Linux/Docker)
+pytesseract.pytesseract.tesseract_cmd = '/usr/bin/tesseract'
 
 def allowed_file(filename):
     return '.' in filename and \
@@ -107,6 +106,7 @@ if __name__ == '__main__':
     # On Windows, you might need to set the POPPLER_PATH environment variable
     # or define it here if the getenv call doesn't work for your setup.
     # Example: POPPLER_PATH = r'C:\poppler\poppler-25.07.0\bin'
+    # This overrides the production setting for local development.
     pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 
     # Use Waitress for local production-like testing
