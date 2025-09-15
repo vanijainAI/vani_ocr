@@ -2,11 +2,14 @@
 services:
 - type: web
   name: vani_ocr
-  runtime: python
+  runtime: docker
   repo: https://github.com/vanijainAI/vani_ocr
   plan: free
   region: oregon
-  buildCommand: bash build.sh
-  startCommand: gunicorn app:app
+  # The build command is handled by the Dockerfile.
+  # The start command binds Gunicorn to the port Render expects.
+  startCommand: "gunicorn --bind 0.0.0.0:$PORT --worker-tmp-dir /dev/shm app:app"
   autoDeployTrigger: commit
-version: "1"
+  envVars:
+    - key: PYTHON_VERSION
+      value: 3.11 # Match the version in your Dockerfile
