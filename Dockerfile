@@ -16,6 +16,10 @@ RUN apt-get update && apt-get install -y \
     --no-install-recommends && \
     rm -rf /var/lib/apt/lists/*
 
+# Find the tesseract executable path and set it as an environment variable
+# This makes the setup resilient to changes in package installation paths.
+ENV TESSERACT_CMD_PATH=/usr/bin/tesseract
+
 # Copy the requirements file into the container
 COPY requirements.txt .
 

@@ -14,8 +14,9 @@ ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'tiff', 'bmp', 'pdf'}
 # This will be None on Render, which is what we want.
 POPPLER_PATH = os.environ.get('POPPLER_PATH', None)
 
-# Set the Tesseract command path for the production (Docker) environment
-pytesseract.pytesseract.tesseract_cmd = '/usr/bin/tesseract'
+# Read the Tesseract command path from the environment variable set in the Dockerfile/render.yaml
+if os.environ.get('TESSERACT_CMD'):
+    pytesseract.pytesseract.tesseract_cmd = os.environ.get('TESSERACT_CMD')
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
